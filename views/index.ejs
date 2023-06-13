@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        BREAD
+    </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/ccbf951677.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1>
+        BREAD ( Browse, Read, Edit, Add, Delete )
+    </h1>
+    <h2>Filters</h2>
+    <div class="container">
+        <form action="" method="get">
+            <input type="hidden" name="page" value="1">
+            <div class="row mb-3">
+                <label for="id" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxID" name="checkboxID" <%=query.checkboxID ? "checked" : "" %>>
+                    ID
+                </label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="id" name="id" placeholder="ID"
+                        value="<%= query.id %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="string" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxString" name="checkboxString" <%=query.checkboxString ? "checked"
+                        : "" %>>
+                    String
+                </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="string" name="string" placeholder="String"
+                        value="<%= query.string %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="integer" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxInteger" name="checkboxInteger" <%=query.checkboxInteger
+                        ? "checked" : "" %>>
+                    Integer
+                </label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="integer" name="integer" placeholder="Integer"
+                        value="<%= query.integer %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="float" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxFloat" name="checkboxFloat" <%=query.checkboxFloat ? "checked"
+                        : "" %>>
+                    Float
+                </label>
+                <div class="col-sm-9">
+                    <input type="number" step="any" class="form-control" id="float" name="float" placeholder="float"
+                        value="<%= query.float %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="date" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxDate" name="checkboxDate" <%=query.checkboxDate ? "checked" : ""
+                        %>>
+                    Date
+                </label>
+                <div class="col-sm-9">
+                    <input class="form-control" placeholder="Start Date" name="startDate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="date"
+                        style="width: 20%; margin-bottom: 0px;" value="<%= query.startDate %>" />
+                    to
+                    <input class="form-control" placeholder="End Date" name="endDate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="date"
+                        style="width: 20%; margin-top: 0px;" value="<%= query.endDate %>" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="boolean" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxBoolean" name="checkboxBoolean" <%=query.checkboxBoolean
+                        ? "checked" : "" %>>
+                    Boolean
+                </label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="boolean" id="boolean">
+                        <option value="">Choose the boolean...</option>
+                        <option value="true" <% if (query.boolean=="true" ) { %>selected<% } %>>True</option>
+                        <option value="false" <% if (query.boolean=="false" ) { %>selected<% } %>>False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a type="submit" class="btn btn-danger" href="/">Reset</a>
+            </div>
+        </form>
+    </div>
+    <div class="table">
+        <table id="table" class="table table-striped">
+            <!-- <thead>
+                <tr>
+                    <th><a href="<%= url %>&sortby=id&sortOrder=">ID</a></th>
+                    <th><a href="?sortby=string&<%= url %>">String</a></th>
+                    <th><a href="?sortby=integer&<%= url %>">Integer</a></th>
+                    <th><a href="?sortby=float&<%= url %>">Float</a></th>
+                    <th><a href="?sortby=date&<%= url %>">Date</a></th>
+                    <th><a href="?sortby=boolean&<%= url %>">Boolean</a></th>
+                    <th>Actions</th>
+                </tr>
+            </thead> -->
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=id&sortOrder=<%= sortOrder === 'asc' && sortBy === 'id' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'id' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'id' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>
+                        String
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=string&sortOrder=<%= sortOrder === 'asc' && sortBy === 'string' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'string' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'string' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Integer
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=integer&sortOrder=<%= sortOrder === 'asc' && sortBy === 'integer' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'integer' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'integer' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Float
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=float&sortOrder=<%= sortOrder === 'asc' && sortBy === 'float' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'float' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'float' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Date
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=tanggal&sortOrder=<%= sortOrder === 'asc' && sortBy === 'tanggal' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'tanggal' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'tanggal' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>
+                        Boolean
+                        <a href="<%= url.split('&').filter(param => !/^sortOrder=|^sortBy=/.test(param)).join('&') %>&sortBy=boolean&sortOrder=<%= sortOrder === 'asc' && sortBy === 'boolean' ? 'desc' : 'asc' %>">
+                            <i class="fa <%= sortOrder === 'asc' && sortBy === 'boolean' ? 'fa-arrow-down-short-wide' : sortOrder === 'desc' && sortBy === 'boolean' ? 'fa-arrow-up-short-wide' : 'fa-sort' %>"></i>
+                        </a>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach((item, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= item.id %>
+                        </td>
+                        <td>
+                            <%= item.string %>
+                        </td>
+                        <td>
+                            <%= item.integer %>
+                        </td>
+                        <td>
+                            <%= item.float %>
+                        </td>
+                        <td>
+                            <%= moment(item.tanggal).format('DD-MMM-YYYY') %>
+                        </td>
+                        <td>
+                            <%= item.boolean %>
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="/edit/<%= item.id %>">Edit</a>
+                            <a class="btn btn-danger" href="/delete/<%= item.id %>">Delete</a>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+        <div class="row mb-3">
+            <a class="btn btn-primary" style="margin-left: 10px; width: 98.5%;" href="/add">Add</a>
+        </div>
+        <div class="pagination">
+            <% if (page> 1) { %>
+                <a href="<%= url.replace(`page=${page}`, `page=${page-1}`) %>">&laquo;</a>
+                <% } %>
+
+                    <% for (let i=1; i <=pages; i++) { %>
+                        <a class="<%= page == i ? 'active' : '' %>"
+                            href="<%= url.replace(`page=${page}`, `page=${i}`) %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+
+                            <% if (page < pages) { %>
+                                <a
+                                    href="<%= url.replace(`page=${parseInt(page)}`, `page=${parseInt(page)+1}`) %>">&raquo;</a>
+                                <% } %>
+        </div>
+    </div>
+</body>
+
+</html>
