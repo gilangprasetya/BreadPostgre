@@ -115,6 +115,7 @@ module.exports = function (db) {
         console.error(err.message)
       } else {
         res.render('edit', { data: data.rows[0], moment })
+        console.log(data.rows[0])
       }
     })
   })
